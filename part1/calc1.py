@@ -112,11 +112,17 @@ class Interpreter(object):
 
 
 def main():
+    
+    try:
+        # To run under Python2 replace 'input' with 'raw_input'
+        input = raw_input
+    except:
+        # We are running under Python3
+        pass
+    
     while True:
         try:
-            # To run under Python3 replace 'raw_input' call
-            # with 'input'
-            text = raw_input('calc> ')
+            text = input('calc> ')
         except EOFError:
             break
         if not text:
