@@ -17,7 +17,7 @@ class Token(object):
 
         Examples:
             Token(INTEGER, 3)
-            Token(PLUS '+')
+            Token(PLUS, '+')
         """
         return 'Token({type}, {value})'.format(
             type=self.type,
