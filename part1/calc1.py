@@ -114,9 +114,10 @@ class Interpreter(object):
 def main():
     while True:
         try:
-            # To run under Python3 replace 'raw_input' call
-            # with 'input'
-            text = raw_input('calc> ')
+            try:
+                text = raw_input('calc> ')
+            except NameError:  # Python3
+                text = input('calc> ')
         except EOFError:
             break
         if not text:
