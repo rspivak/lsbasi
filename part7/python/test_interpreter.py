@@ -102,8 +102,13 @@ class InterpreterTestCase(unittest.TestCase):
         result = interpreter.interpret()
         self.assertEqual(result, 12)
 
-    def test_expression_invalid_syntax(self):
+    def test_expression_invalid_syntax1(self):
         interpreter = self.makeInterpreter('10 *')
+        with self.assertRaises(Exception):
+            interpreter.interpret()
+
+    def test_expression_invalid_syntax2(self):
+        interpreter = self.makeInterpreter('1 (1 + 2)')
         with self.assertRaises(Exception):
             interpreter.interpret()
 
