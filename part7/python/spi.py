@@ -201,7 +201,10 @@ class Parser(object):
         return node
 
     def parse(self):
-        return self.expr()
+        node = self.expr()
+        if self.current_token.type != EOF:
+            self.error()
+        return node
 
 
 ###############################################################################
