@@ -8,3 +8,4 @@ Source code for the series **Let's Build A Simple Interpreter**
 + [Let's Build A Simple Interpreter. Part 6.](http://ruslanspivak.com/lsbasi-part6/)
 + [Let's Build A Simple Interpreter. Part 7.](http://ruslanspivak.com/lsbasi-part7/)
 + [Let's Build A Simple Interpreter. Part 8.](http://ruslanspivak.com/lsbasi-part8/)
++ [Let's Build A Simple Interpreter. Part 9.](http://ruslanspivak.com/lsbasi-part9/)
