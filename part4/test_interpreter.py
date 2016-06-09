@@ -11,21 +11,21 @@ class LexerTestCase(unittest.TestCase):
         from calc4 import INTEGER
         lexer = self.makeLexer('234')
         token = lexer.get_next_token()
-        self.assertEqual(token.type, INTEGER)
+        self.assertEqual(token.ttype, INTEGER)
         self.assertEqual(token.value, 234)
 
     def test_lexer_mul(self):
         from calc4 import MUL
         lexer = self.makeLexer('*')
         token = lexer.get_next_token()
-        self.assertEqual(token.type, MUL)
+        self.assertEqual(token.ttype, MUL)
         self.assertEqual(token.value, '*')
 
     def test_lexer_div(self):
         from calc4 import DIV
         lexer = self.makeLexer(' / ')
         token = lexer.get_next_token()
-        self.assertEqual(token.type, DIV)
+        self.assertEqual(token.ttype, DIV)
         self.assertEqual(token.value, '/')
 
 

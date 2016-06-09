@@ -5,9 +5,9 @@ INTEGER, PLUS, MINUS, EOF = 'INTEGER', 'PLUS', 'MINUS', 'EOF'
 
 
 class Token(object):
-    def __init__(self, type, value):
+    def __init__(self, ttype, value):
         # token type: INTEGER, PLUS, MINUS, or EOF
-        self.type = type
+        self.ttype = ttype
         # token value: non-negative integer value, '+', '-', or None
         self.value = value
 
@@ -18,8 +18,8 @@ class Token(object):
             Token(INTEGER, 3)
             Token(PLUS '+')
         """
-        return 'Token({type}, {value})'.format(
-            type=self.type,
+        return 'Token({ttype}, {value})'.format(
+            ttype=self.ttype,
             value=repr(self.value)
         )
 
@@ -92,7 +92,7 @@ class Interpreter(object):
         # type and if they match then "eat" the current token
         # and assign the next token to the self.current_token,
         # otherwise raise an exception.
-        if self.current_token.type == token_type:
+        if self.current_token.ttype == token_type:
             self.current_token = self.get_next_token()
         else:
             self.error()
@@ -112,7 +112,7 @@ class Interpreter(object):
 
         # we expect the current token to be either a '+' or '-'
         op = self.current_token
-        if op.type == PLUS:
+        if op.ttype == PLUS:
             self.eat(PLUS)
         else:
             self.eat(MINUS)
@@ -128,7 +128,7 @@ class Interpreter(object):
         # has been successfully found and the method can just
         # return the result of adding or subtracting two integers,
         # thus effectively interpreting client input
-        if op.type == PLUS:
+        if op.ttype == PLUS:
             result = left.value + right.value
         else:
             result = left.value - right.value

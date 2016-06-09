@@ -18,8 +18,8 @@
 
 
 class Token(object):
-    def __init__(self, type, value):
-        self.type = type
+    def __init__(self, ttype, value):
+        self.ttype = ttype
         self.value = value
 
     def __str__(self):
@@ -30,8 +30,8 @@ class Token(object):
             Token(PLUS, '+')
             Token(MUL, '*')
         """
-        return 'Token({type}, {value})'.format(
-            type=self.type,
+        return 'Token({ttype}, {value})'.format(
+            ttype=self.ttype,
             value=repr(self.value)
         )
 
@@ -220,7 +220,7 @@ class Parser(object):
         # type and if they match then "eat" the current token
         # and assign the next token to the self.current_token,
         # otherwise raise an exception.
-        if self.current_token.type == token_type:
+        if self.current_token.ttype == token_type:
             self.current_token = self.lexer.get_next_token()
         else:
             self.error()
@@ -254,11 +254,11 @@ class Parser(object):
 
         results = [node]
 
-        while self.current_token.type == SEMI:
+        while self.current_token.ttype == SEMI:
             self.eat(SEMI)
             results.append(self.statement())
 
-        if self.current_token.type == ID:
+        if self.current_token.ttype == ID:
             self.error()
 
         return results
@@ -269,9 +269,9 @@ class Parser(object):
                   | assignment_statement
                   | empty
         """
-        if self.current_token.type == BEGIN:
+        if self.current_token.ttype == BEGIN:
             node = self.compound_statement()
-        elif self.current_token.type == ID:
+        elif self.current_token.ttype == ID:
             node = self.assignment_statement()
         else:
             node = self.empty()
@@ -306,11 +306,11 @@ class Parser(object):
         """
         node = self.term()
 
-        while self.current_token.type in (PLUS, MINUS):
+        while self.current_token.ttype in (PLUS, MINUS):
             token = self.current_token
-            if token.type == PLUS:
+            if token.ttype == PLUS:
                 self.eat(PLUS)
-            elif token.type == MINUS:
+            elif token.ttype == MINUS:
                 self.eat(MINUS)
 
             node = BinOp(left=node, op=token, right=self.term())
@@ -321,11 +321,11 @@ class Parser(object):
         """term : factor ((MUL | DIV) factor)*"""
         node = self.factor()
 
-        while self.current_token.type in (MUL, DIV):
+        while self.current_token.ttype in (MUL, DIV):
             token = self.current_token
-            if token.type == MUL:
+            if token.ttype == MUL:
                 self.eat(MUL)
-            elif token.type == DIV:
+            elif token.ttype == DIV:
                 self.eat(DIV)
 
             node = BinOp(left=node, op=token, right=self.factor())
@@ -340,18 +340,18 @@ class Parser(object):
                   | variable
         """
         token = self.current_token
-        if token.type == PLUS:
+        if token.ttype == PLUS:
             self.eat(PLUS)
             node = UnaryOp(token, self.factor())
             return node
-        elif token.type == MINUS:
+        elif token.ttype == MINUS:
             self.eat(MINUS)
             node = UnaryOp(token, self.factor())
             return node
-        elif token.type == INTEGER:
+        elif token.ttype == INTEGER:
             self.eat(INTEGER)
             return Num(token)
-        elif token.type == LPAREN:
+        elif token.ttype == LPAREN:
             self.eat(LPAREN)
             node = self.expr()
             self.eat(RPAREN)
@@ -390,7 +390,7 @@ class Parser(object):
         variable: ID
         """
         node = self.program()
-        if self.current_token.type != EOF:
+        if self.current_token.ttype != EOF:
             self.error()
 
         return node
@@ -420,20 +420,20 @@ class Interpreter(NodeVisitor):
         self.parser = parser
 
     def visit_BinOp(self, node):
-        if node.op.type == PLUS:
+        if node.op.ttype == PLUS:
             return self.visit(node.left) + self.visit(node.right)
-        elif node.op.type == MINUS:
+        elif node.op.ttype == MINUS:
             return self.visit(node.left) - self.visit(node.right)
-        elif node.op.type == MUL:
+        elif node.op.ttype == MUL:
             return self.visit(node.left) * self.visit(node.right)
-        elif node.op.type == DIV:
+        elif node.op.ttype == DIV:
             return self.visit(node.left) / self.visit(node.right)
 
     def visit_Num(self, node):
         return node.value
 
     def visit_UnaryOp(self, node):
-        op = node.op.type
+        op = node.op.ttype
         if op == PLUS:
             return +self.visit(node.expr)
         elif op == MINUS:
