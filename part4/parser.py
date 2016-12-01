@@ -6,9 +6,9 @@ INTEGER, MUL, DIV, EOF = 'INTEGER', 'MUL', 'DIV', 'EOF'
 
 
 class Token(object):
-    def __init__(self, type, value):
+    def __init__(self, ttype, value):
         # token type: INTEGER, MUL, DIV, or EOF
-        self.type = type
+        self.ttype = ttype
         # token value: non-negative integer value, '*', '/', or None
         self.value = value
 
@@ -19,8 +19,8 @@ class Token(object):
             Token(INTEGER, 3)
             Token(MUL, '*')
         """
-        return 'Token({type}, {value})'.format(
-            type=self.type,
+        return 'Token({ttype}, {value})'.format(
+            ttype=self.ttype,
             value=repr(self.value)
         )
 
@@ -101,7 +101,7 @@ class Parser(object):
         # type and if they match then "eat" the current token
         # and assign the next token to the self.current_token,
         # otherwise raise an exception.
-        if self.current_token.type == token_type:
+        if self.current_token.ttype == token_type:
             self.current_token = self.lexer.get_next_token()
         else:
             self.error()
@@ -123,12 +123,12 @@ class Parser(object):
         """
         self.factor()
 
-        while self.current_token.type in (MUL, DIV):
+        while self.current_token.ttype in (MUL, DIV):
             token = self.current_token
-            if token.type == MUL:
+            if token.ttype == MUL:
                 self.eat(MUL)
                 self.factor()
-            elif token.type == DIV:
+            elif token.ttype == DIV:
                 self.eat(DIV)
                 self.factor()
 

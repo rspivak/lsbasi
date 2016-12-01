@@ -11,49 +11,49 @@ class LexerTestCase(unittest.TestCase):
         from calc6 import INTEGER
         lexer = self.makeLexer('234')
         token = lexer.get_next_token()
-        self.assertEqual(token.type, INTEGER)
+        self.assertEqual(token.ttype, INTEGER)
         self.assertEqual(token.value, 234)
 
     def test_lexer_mul(self):
         from calc6 import MUL
         lexer = self.makeLexer('*')
         token = lexer.get_next_token()
-        self.assertEqual(token.type, MUL)
+        self.assertEqual(token.ttype, MUL)
         self.assertEqual(token.value, '*')
 
     def test_lexer_div(self):
         from calc6 import DIV
         lexer = self.makeLexer(' / ')
         token = lexer.get_next_token()
-        self.assertEqual(token.type, DIV)
+        self.assertEqual(token.ttype, DIV)
         self.assertEqual(token.value, '/')
 
     def test_lexer_plus(self):
         from calc6 import PLUS
         lexer = self.makeLexer('+')
         token = lexer.get_next_token()
-        self.assertEqual(token.type, PLUS)
+        self.assertEqual(token.ttype, PLUS)
         self.assertEqual(token.value, '+')
 
     def test_lexer_minus(self):
         from calc6 import MINUS
         lexer = self.makeLexer('-')
         token = lexer.get_next_token()
-        self.assertEqual(token.type, MINUS)
+        self.assertEqual(token.ttype, MINUS)
         self.assertEqual(token.value, '-')
 
     def test_lexer_lparen(self):
         from calc6 import LPAREN
         lexer = self.makeLexer('(')
         token = lexer.get_next_token()
-        self.assertEqual(token.type, LPAREN)
+        self.assertEqual(token.ttype, LPAREN)
         self.assertEqual(token.value, '(')
 
     def test_lexer_rparen(self):
         from calc6 import RPAREN
         lexer = self.makeLexer(')')
         token = lexer.get_next_token()
-        self.assertEqual(token.type, RPAREN)
+        self.assertEqual(token.ttype, RPAREN)
         self.assertEqual(token.value, ')')
 
 

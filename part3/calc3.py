@@ -6,9 +6,9 @@ INTEGER, PLUS, MINUS, EOF = 'INTEGER', 'PLUS', 'MINUS', 'EOF'
 
 
 class Token(object):
-    def __init__(self, type, value):
+    def __init__(self, ttype, value):
         # token type: INTEGER, PLUS, MINUS, or EOF
-        self.type = type
+        self.ttype = ttype
         # token value: non-negative integer value, '+', '-', or None
         self.value = value
 
@@ -19,8 +19,8 @@ class Token(object):
             Token(INTEGER, 3)
             Token(PLUS, '+')
         """
-        return 'Token({type}, {value})'.format(
-            type=self.type,
+        return 'Token({ttype}, {value})'.format(
+            ttype=self.ttype,
             value=repr(self.value)
         )
 
@@ -99,7 +99,7 @@ class Interpreter(object):
         # type and if they match then "eat" the current token
         # and assign the next token to the self.current_token,
         # otherwise raise an exception.
-        if self.current_token.type == token_type:
+        if self.current_token.ttype == token_type:
             self.current_token = self.get_next_token()
         else:
             self.error()
@@ -116,12 +116,12 @@ class Interpreter(object):
         self.current_token = self.get_next_token()
 
         result = self.term()
-        while self.current_token.type in (PLUS, MINUS):
+        while self.current_token.ttype in (PLUS, MINUS):
             token = self.current_token
-            if token.type == PLUS:
+            if token.ttype == PLUS:
                 self.eat(PLUS)
                 result = result + self.term()
-            elif token.type == MINUS:
+            elif token.ttype == MINUS:
                 self.eat(MINUS)
                 result = result - self.term()
 

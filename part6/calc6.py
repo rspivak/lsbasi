@@ -8,8 +8,8 @@ INTEGER, PLUS, MINUS, MUL, DIV, LPAREN, RPAREN, EOF = (
 
 
 class Token(object):
-    def __init__(self, type, value):
-        self.type = type
+    def __init__(self, ttype, value):
+        self.ttype = ttype
         self.value = value
 
     def __str__(self):
@@ -20,8 +20,8 @@ class Token(object):
             Token(PLUS, '+')
             Token(MUL, '*')
         """
-        return 'Token({type}, {value})'.format(
-            type=self.type,
+        return 'Token({ttype}, {value})'.format(
+            ttype=self.ttype,
             value=repr(self.value)
         )
 
@@ -118,7 +118,7 @@ class Interpreter(object):
         # type and if they match then "eat" the current token
         # and assign the next token to the self.current_token,
         # otherwise raise an exception.
-        if self.current_token.type == token_type:
+        if self.current_token.ttype == token_type:
             self.current_token = self.lexer.get_next_token()
         else:
             self.error()
@@ -126,10 +126,10 @@ class Interpreter(object):
     def factor(self):
         """factor : INTEGER | LPAREN expr RPAREN"""
         token = self.current_token
-        if token.type == INTEGER:
+        if token.ttype == INTEGER:
             self.eat(INTEGER)
             return token.value
-        elif token.type == LPAREN:
+        elif token.ttype == LPAREN:
             self.eat(LPAREN)
             result = self.expr()
             self.eat(RPAREN)
@@ -139,12 +139,12 @@ class Interpreter(object):
         """term : factor ((MUL | DIV) factor)*"""
         result = self.factor()
 
-        while self.current_token.type in (MUL, DIV):
+        while self.current_token.ttype in (MUL, DIV):
             token = self.current_token
-            if token.type == MUL:
+            if token.ttype == MUL:
                 self.eat(MUL)
                 result = result * self.factor()
-            elif token.type == DIV:
+            elif token.ttype == DIV:
                 self.eat(DIV)
                 result = result / self.factor()
 
@@ -162,12 +162,12 @@ class Interpreter(object):
         """
         result = self.term()
 
-        while self.current_token.type in (PLUS, MINUS):
+        while self.current_token.ttype in (PLUS, MINUS):
             token = self.current_token
-            if token.type == PLUS:
+            if token.ttype == PLUS:
                 self.eat(PLUS)
                 result = result + self.term()
-            elif token.type == MINUS:
+            elif token.ttype == MINUS:
                 self.eat(MINUS)
                 result = result - self.term()
 
