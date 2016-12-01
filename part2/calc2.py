@@ -54,11 +54,11 @@ class Interpreter(object):
 
     def integer(self):
         """Return a (multidigit) integer consumed from the input."""
-        result = ''
+        result = []
         while self.current_char is not None and self.current_char.isdigit():
-            result += self.current_char
+            result.append(self.current_char)
             self.advance()
-        return int(result)
+        return int(''.join(result))
 
     def get_next_token(self):
         """Lexical analyzer (also known as scanner or tokenizer)
@@ -114,8 +114,10 @@ class Interpreter(object):
         op = self.current_token
         if op.type == PLUS:
             self.eat(PLUS)
-        else:
+        elif op.type == MINUS:
             self.eat(MINUS)
+        else:
+            self.error()
 
         # we expect the current token to be an integer
         right = self.current_token
