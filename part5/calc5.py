@@ -134,7 +134,7 @@ class Interpreter(object):
                 result = result * self.factor()
             elif token.type == DIV:
                 self.eat(DIV)
-                result = result / self.factor()
+                result = result // self.factor()
 
         return result
 
@@ -165,10 +165,7 @@ class Interpreter(object):
 def main():
     while True:
         try:
-            try:
-                text = raw_input('calc> ')
-            except NameError:  # Python3
-                text = input('calc> ')
+            text = input('calc> ')
         except EOFError:
             break
         if not text:

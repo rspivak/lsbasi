@@ -1,7 +1,5 @@
 """ SPI - Simple Pascal Interpreter. Part 14."""
 
-from collections import OrderedDict
-
 ###############################################################################
 #                                                                             #
 #  LEXER                                                                      #
@@ -660,7 +658,7 @@ class Symbol(object):
 
 class VarSymbol(Symbol):
     def __init__(self, name, type):
-        super(VarSymbol, self).__init__(name, type)
+        super().__init__(name, type)
 
     def __str__(self):
         return "<{class_name}(name='{name}', type='{type}')>".format(
@@ -674,7 +672,7 @@ class VarSymbol(Symbol):
 
 class BuiltinTypeSymbol(Symbol):
     def __init__(self, name):
-        super(BuiltinTypeSymbol, self).__init__(name)
+        super().__init__(name)
 
     def __str__(self):
         return self.name
@@ -688,7 +686,7 @@ class BuiltinTypeSymbol(Symbol):
 
 class ProcedureSymbol(Symbol):
     def __init__(self, name, params=None):
-        super(ProcedureSymbol, self).__init__(name)
+        super().__init__(name)
         # a list of formal parameters
         self.params = params if params is not None else []
 
@@ -704,7 +702,7 @@ class ProcedureSymbol(Symbol):
 
 class ScopedSymbolTable(object):
     def __init__(self, scope_name, scope_level, enclosing_scope=None):
-        self._symbols = OrderedDict()
+        self._symbols = {}
         self.scope_name = scope_name
         self.scope_level = scope_level
         self.enclosing_scope = enclosing_scope
@@ -865,7 +863,7 @@ class SemanticAnalyzer(NodeVisitor):
 class Interpreter(NodeVisitor):
     def __init__(self, tree):
         self.tree = tree
-        self.GLOBAL_MEMORY = OrderedDict()
+        self.GLOBAL_MEMORY = {}
 
     def visit_Program(self, node):
         self.visit(node.block)
@@ -951,9 +949,8 @@ def main():
     # print('')
     # print('Run-time GLOBAL_MEMORY contents:')
     # for k, v in sorted(interpreter.GLOBAL_MEMORY.items()):
-    #     print('%s = %s' % (k, v))
+    #     print('{} = {}'.format(k, v))
 
 
 if __name__ == '__main__':
     main()
-

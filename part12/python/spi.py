@@ -1,7 +1,5 @@
 """ SPI - Simple Pascal Interpreter. Part 12. """
 
-from collections import OrderedDict
-
 ###############################################################################
 #                                                                             #
 #  LEXER                                                                      #
@@ -597,7 +595,7 @@ class Symbol(object):
 
 class VarSymbol(Symbol):
     def __init__(self, name, type):
-        super(VarSymbol, self).__init__(name, type)
+        super().__init__(name, type)
 
     def __str__(self):
         return '<{name}:{type}>'.format(name=self.name, type=self.type)
@@ -607,7 +605,7 @@ class VarSymbol(Symbol):
 
 class BuiltinTypeSymbol(Symbol):
     def __init__(self, name):
-        super(BuiltinTypeSymbol, self).__init__(name)
+        super().__init__(name)
 
     def __str__(self):
         return self.name
@@ -617,7 +615,7 @@ class BuiltinTypeSymbol(Symbol):
 
 class SymbolTable(object):
     def __init__(self):
-        self._symbols = OrderedDict()
+        self._symbols = {}
         self._init_builtins()
 
     def _init_builtins(self):
@@ -707,7 +705,7 @@ class SymbolTableBuilder(NodeVisitor):
 class Interpreter(NodeVisitor):
     def __init__(self, tree):
         self.tree = tree
-        self.GLOBAL_MEMORY = OrderedDict()
+        self.GLOBAL_MEMORY = {}
 
     def visit_Program(self, node):
         self.visit(node.block)
@@ -793,7 +791,7 @@ def main():
     print('')
     print('Run-time GLOBAL_MEMORY contents:')
     for k, v in sorted(interpreter.GLOBAL_MEMORY.items()):
-        print('%s = %s' % (k, v))
+        print('{} = {}'.format(k, v))
 
 
 if __name__ == '__main__':

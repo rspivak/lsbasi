@@ -249,7 +249,7 @@ class Interpreter(NodeVisitor):
         elif node.op.type == MUL:
             return self.visit(node.left) * self.visit(node.right)
         elif node.op.type == DIV:
-            return self.visit(node.left) / self.visit(node.right)
+            return self.visit(node.left) // self.visit(node.right)
 
     def visit_Num(self, node):
         return node.value
@@ -271,10 +271,7 @@ class Interpreter(NodeVisitor):
 def main():
     while True:
         try:
-            try:
-                text = raw_input('spi> ')
-            except NameError:  # Python3
-                text = input('spi> ')
+            text = input('spi> ')
         except EOFError:
             break
         if not text:

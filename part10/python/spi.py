@@ -511,7 +511,7 @@ class Parser(object):
 
         variable_declaration : ID (COMMA ID)* COLON type_spec
 
-        type_spec : INTEGER
+        type_spec : INTEGER | REAL
 
         compound_statement : BEGIN statement_list END
 
@@ -565,8 +565,7 @@ class NodeVisitor(object):
 class Interpreter(NodeVisitor):
     def __init__(self, parser):
         self.parser = parser
-        import collections
-        self.GLOBAL_SCOPE = collections.OrderedDict()
+        self.GLOBAL_SCOPE = {}
 
     def visit_Program(self, node):
         self.visit(node.block)
@@ -642,7 +641,7 @@ def main():
     result = interpreter.interpret()
 
     for k, v in sorted(interpreter.GLOBAL_SCOPE.items()):
-        print('%s = %s' % (k, v))
+        print('{} = {}'.format(k, v))
 
 
 if __name__ == '__main__':
