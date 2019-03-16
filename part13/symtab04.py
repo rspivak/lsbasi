@@ -1,10 +1,9 @@
-from collections import OrderedDict
 from spi import Lexer, Parser, NodeVisitor, BuiltinTypeSymbol, VarSymbol
 
 
 class SymbolTable(object):
     def __init__(self):
-        self._symbols = OrderedDict()
+        self._symbols = {}
         self._init_builtins()
 
     def _init_builtins(self):
