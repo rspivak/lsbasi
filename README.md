@@ -1,4 +1,4 @@
-Source code for the series **Let's Build A Simple Interpreter**
+Source code for the series **Let's Build A Simple Interpreter** (Supports Python 3.7+ only)
 
 + [Let's Build A Simple Interpreter. Part 1.](https://ruslanspivak.com/lsbasi-part1/)
 + [Let's Build A Simple Interpreter. Part 2.](https://ruslanspivak.com/lsbasi-part2/)
