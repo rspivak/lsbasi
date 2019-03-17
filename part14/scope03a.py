@@ -1,5 +1,3 @@
-from collections import OrderedDict
-
 from spi import (
     Lexer,
     Parser,
@@ -12,7 +10,7 @@ from spi import (
 
 class ScopedSymbolTable(object):
     def __init__(self, scope_name, scope_level, enclosing_scope=None):
-        self._symbols = OrderedDict()
+        self._symbols = {}
         self.scope_name = scope_name
         self.scope_level = scope_level
         self.enclosing_scope = enclosing_scope
@@ -169,4 +167,3 @@ end.  { Main }
     tree = parser.parse()
     semantic_analyzer = SemanticAnalyzer()
     semantic_analyzer.visit(tree)
-

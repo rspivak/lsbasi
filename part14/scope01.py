@@ -1,10 +1,9 @@
-from collections import OrderedDict
 from spi import Lexer, Parser, NodeVisitor, BuiltinTypeSymbol, VarSymbol
 
 
 class ScopedSymbolTable(object):
     def __init__(self, scope_name, scope_level):
-        self._symbols = OrderedDict()
+        self._symbols = {}
         self.scope_name = scope_name
         self.scope_level = scope_level
         self._init_builtins()

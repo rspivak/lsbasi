@@ -1,7 +1,5 @@
 # source-to-source compiler
 
-from collections import OrderedDict
-
 from spi import (
     Lexer,
     Parser,
@@ -14,7 +12,7 @@ from spi import (
 
 class ScopedSymbolTable(object):
     def __init__(self, scope_name, scope_level, enclosing_scope=None):
-        self._symbols = OrderedDict()
+        self._symbols = {}
         self.scope_name = scope_name
         self.scope_level = scope_level
         self.enclosing_scope = enclosing_scope
@@ -217,6 +215,3 @@ if __name__ == '__main__':
     source_compiler = SourceToSourceCompiler()
     source_compiler.visit(tree)
     print(source_compiler.output)
-
-
-
