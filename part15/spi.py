@@ -920,7 +920,7 @@ class SemanticAnalyzer(NodeVisitor):
         self.log(procedure_scope)
 
         self.current_scope = self.current_scope.enclosing_scope
-        self.log('LEAVE scope: {proc_name}')
+        self.log(f'LEAVE scope: {proc_name}')
 
     def visit_VarDecl(self, node):
         type_name = node.type_node.value
