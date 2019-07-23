@@ -1,0 +1,32 @@
+Exercise: Add a check to the semantic analyzer that verifies that the number of
+arguments (actual parameters) passed to a procedure call equals the number of
+formal parameters defined in the corresponding procedure declaration.
+
+Solution to the Exercise:
+
+1. Add a new error code called WRONG_PARAMS_NUM to the ErrorCode class:
+
+class ErrorCode(Enum):
+    UNEXPECTED_TOKEN = 'Unexpected token'
+    ID_NOT_FOUND     = 'Identifier not found'
+    DUPLICATE_ID     = 'Duplicate id found'
+    WRONG_PARAMS_NUM = 'Wrong number of arguments'
+
+
+2. Extend the visit_ProcedureCall method with the following check:
+
+class SemanticAnalyzer(NodeVisitor):
+    ...
+    def visit_ProcedureCall(self, node):
+        proc_symbol = self.current_scope.lookup(node.proc_name)
+        formal_params = proc_symbol.params
+        actual_params = node.actual_params
+
+        if len(actual_params) != len(formal_params):
+            self.error(
+                error_code=ErrorCode.WRONG_PARAMS_NUM,
+                token=node.token,
+            )
+
+        for param_node in node.actual_params:
+            self.visit(param_node)
