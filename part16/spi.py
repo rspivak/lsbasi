@@ -578,7 +578,7 @@ class Parser(object):
         return node
 
     def proccall_statement(self):
-        """proccall_statement : ID LPAREN expr? (COMMA expr)* RPAREN"""
+        """proccall_statement : ID LPAREN (expr (COMMA expr)*)? RPAREN"""
         token = self.current_token
 
         proc_name = self.current_token.value
@@ -726,7 +726,7 @@ class Parser(object):
                   | assignment_statement
                   | empty
 
-        proccall_statement : ID LPAREN expr? (COMMA expr)* RPAREN
+        proccall_statement : ID LPAREN (expr (COMMA expr)*)? RPAREN
 
         assignment_statement : variable ASSIGN expr
 
