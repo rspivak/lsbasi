@@ -23,11 +23,11 @@ pub struct Lexer {
 impl Lexer {
     fn new(text: String) -> Lexer {
         let mut lexer = Lexer {
-            text: text,
+            text,
             pos: 0,
             current_char: None,
         };
-        if lexer.text.len() > 0 {
+        if !lexer.text.is_empty() {
             lexer.current_char = Some(lexer.text.as_bytes()[0] as char);
         }
 
@@ -123,8 +123,8 @@ struct AST {
 impl AST {
     fn new(token: Token, children: Vec<AST>) -> AST {
         AST {
-            token: token,
-            children: children,
+            token,
+            children,
         }
     }
 }
@@ -138,7 +138,7 @@ pub struct Parser {
 impl Parser {
     fn new(lexer: Lexer) -> Parser {
         let mut parser = Parser {
-            lexer: lexer,
+            lexer,
             current_token: None,
         };
         parser.current_token = Some(parser.lexer.get_next_token());
@@ -160,13 +160,13 @@ impl Parser {
         match token {
             Token::INTEGER(i) => {
                 self.eat(Token::INTEGER(i));
-                return AST::new(token, vec![]);
+                AST::new(token, vec![])
             },
             Token::LPAREN => {
                 self.eat(Token::LPAREN);
                 let node = self.expr();
                 self.eat(Token::RPAREN);
-                return node;
+                node
             },
             _ => panic!("Invalid syntax"),
         }
@@ -238,13 +238,13 @@ pub struct Interpreter {
 impl Interpreter {
     fn new(parser: Parser) -> Interpreter {
         Interpreter {
-            parser: parser,
+            parser,
         }
     }
 
     fn visit_num(&self, node: &AST) -> i32 {
         match node.token {
-            Token::INTEGER(i) => { return i; },
+            Token::INTEGER(i) => { i },
             _ => panic!("Error"),
         }
     }
@@ -255,16 +255,16 @@ impl Interpreter {
 
         match node.token {
             Token::PLUS => {
-                return left_val + right_val;
+                left_val + right_val
             },
             Token::MINUS => {
-                return left_val - right_val;
+                left_val - right_val
             },
             Token::MUL => {
-                return left_val * right_val;
+                left_val * right_val
             },
             Token::DIV => {
-                return left_val / right_val;
+                left_val / right_val
             },
             _ => panic!("Error"),
         }
@@ -272,11 +272,11 @@ impl Interpreter {
 
     fn visit(&self, node: &AST) -> i32 {
         match node.token {
-            Token::INTEGER(i) => {
-                return self.visit_num(node);
+            Token::INTEGER(_) => {
+                self.visit_num(node)
             }
             Token::PLUS | Token::MINUS | Token::MUL | Token::DIV => {
-                return self.visit_binop(node);
+                self.visit_binop(node)
             },
             _ => panic!("Error"),
         }
@@ -284,9 +284,7 @@ impl Interpreter {
 
     fn interpret(&mut self) -> i32 {
         let tree = self.parser.parse();
-        let result = self.visit(&tree);
-
-        result
+        self.visit(&tree)
     }
 }
 
@@ -320,9 +318,7 @@ mod tests {
     fn make_interpreter(text: &str) -> Interpreter {
         let lexer = Lexer::new(String::from(text));
         let parser = Parser::new(lexer);
-        let interpreter = Interpreter::new(parser);
-
-        interpreter
+        Interpreter::new(parser)
     }
 
     #[test]
