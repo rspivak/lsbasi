@@ -16,7 +16,7 @@ enum Token {
 
 pub struct Lexer {
     text: String,
-    pos: i32,
+    pos: usize,
     current_char: Option<char>,
 }
 
@@ -36,10 +36,10 @@ impl Lexer {
 
     fn advance(&mut self) {
         self.pos += 1;
-        if self.pos > self.text.len() as i32 - 1 {
+        if self.pos >= self.text.len() {
             self.current_char = None; // Indicates end of input
         } else {
-            self.current_char = Some(self.text.as_bytes()[self.pos as usize] as char);
+            self.current_char = Some(self.text.as_bytes()[self.pos] as char);
         }
     }
 
