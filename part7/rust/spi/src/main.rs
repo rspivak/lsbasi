@@ -15,32 +15,26 @@ enum Token {
 
 
 pub struct Lexer {
-    text: String,
+    chars: Vec<char>,
     pos: usize,
     current_char: Option<char>,
 }
 
 impl Lexer {
     fn new(text: String) -> Lexer {
-        let mut lexer = Lexer {
-            text,
-            pos: 0,
-            current_char: None,
-        };
-        if !lexer.text.is_empty() {
-            lexer.current_char = Some(lexer.text.as_bytes()[0] as char);
-        }
+        let chars=text.chars().collect::<Vec<char>>();
 
-        lexer
+        Lexer {
+            // Out of order to avoid "borrow of moved value" error
+            current_char: chars.first().copied(),
+            chars,
+            pos: 0,
+        }
     }
 
     fn advance(&mut self) {
         self.pos += 1;
-        if self.pos >= self.text.len() {
-            self.current_char = None; // Indicates end of input
-        } else {
-            self.current_char = Some(self.text.as_bytes()[self.pos] as char);
-        }
+        self.current_char = self.chars.get(self.pos).copied();
     }
 
     fn skip_whitespace(&mut self) {
@@ -370,6 +364,14 @@ mod tests {
         let mut interpreter = make_interpreter("7 + (((3 + 2)))");
         let result = interpreter.interpret();
         assert_eq!(result, 12);
+    }
+
+    #[test]
+    fn test_expression_with_unicode() {
+        // U+2000 is a "EN QUAD" space
+        let mut interpreter = make_interpreter("7 +\u{2000}3");
+        let result = interpreter.interpret();
+        assert_eq!(result, 10);
     }
 
     #[test]
