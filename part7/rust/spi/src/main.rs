@@ -62,12 +62,8 @@ impl Lexer {
     }
 
     fn get_next_token(&mut self) -> Token {
-        while let Some(ch) = self.current_char {
-            if ch.is_whitespace() {
-                self.skip_whitespace();
-                continue;
-            }
-
+        self.skip_whitespace();
+        if let Some(ch) = self.current_char {
             if ch.is_digit(10) {
                 return Token::INTEGER(self.integer());
             }
