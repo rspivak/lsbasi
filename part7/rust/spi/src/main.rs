@@ -72,35 +72,16 @@ impl Lexer {
                 return Token::INTEGER(self.integer());
             }
 
-            match ch {
-                '+' => {
-                    self.advance();
-                    return Token::PLUS;
-                },
-                '-' => {
-                    self.advance();
-                    return Token::MINUS;
-                },
-                '*' => {
-                    self.advance();
-                    return Token::MUL;
-                },
-                '/' => {
-                    self.advance();
-                    return Token::DIV;
-                },
-                '(' => {
-                    self.advance();
-                    return Token::LPAREN;
-                },
-                ')' => {
-                    self.advance();
-                    return Token::RPAREN;
-                },
-                _ => {}
+            self.advance();
+            return match ch {
+                '+' => Token::PLUS,
+                '-' => Token::MINUS,
+                '*' => Token::MUL,
+                '/' => Token::DIV,
+                '(' => Token::LPAREN,
+                ')' => Token::RPAREN,
+                _ => panic!("Invalid character")
             }
-
-            panic!("Invalid character");
         }
 
         Token::EOF
