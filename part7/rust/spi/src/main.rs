@@ -145,9 +145,7 @@ impl Parser {
         // term : factor ((MUL | DIV) factor)*
         let mut node = self.factor();
 
-        while self.current_token == Token::MUL ||
-            self.current_token == Token::DIV {
-
+        loop {
             match self.current_token {
                 Token::MUL => {
                     self.eat(Token::MUL);
@@ -159,7 +157,7 @@ impl Parser {
                     let children: Vec<AST> = vec![node, self.factor()];
                     node = AST::new(Token::DIV, children);
                 },
-                _ => panic!("Invalid syntax"),
+                _ => break,
             }
         }
 
@@ -173,9 +171,7 @@ impl Parser {
 
         let mut node = self.term();
 
-        while self.current_token == Token::PLUS ||
-            self.current_token == Token::MINUS {
-
+        loop {
             match self.current_token {
                 Token::PLUS => {
                     self.eat(Token::PLUS);
@@ -187,7 +183,7 @@ impl Parser {
                     let children: Vec<AST> = vec![node, self.term()];
                     node = AST::new(Token::MINUS, children);
                 },
-                _ => panic!("Invalid syntax"),
+                _ => break,
             }
         }
 
