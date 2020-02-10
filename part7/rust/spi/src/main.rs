@@ -103,21 +103,21 @@ impl AST {
 
 pub struct Parser {
     lexer: Lexer,
-    current_token: Option<Token>,
+    current_token: Token,
 }
 
 impl Parser {
     fn new(mut lexer: Lexer) -> Parser {
         Parser {
             // Out of order to avoid "borrow of moved value" error
-            current_token: Some(lexer.get_next_token()),
+            current_token: lexer.get_next_token(),
             lexer,
         }
     }
 
     fn eat(&mut self, token: Token) {
-        if token == self.current_token.unwrap() {
-            self.current_token = Some(self.lexer.get_next_token());
+        if token == self.current_token {
+            self.current_token = self.lexer.get_next_token();
         } else {
             panic!("Invalid syntax");
         }
@@ -125,7 +125,7 @@ impl Parser {
 
     fn factor(&mut self) -> AST {
         // factor : INTEGER | LPAREN expr RPAREN
-        let token = self.current_token.unwrap();
+        let token = self.current_token;
         match token {
             Token::INTEGER(i) => {
                 self.eat(Token::INTEGER(i));
@@ -145,16 +145,16 @@ impl Parser {
         // term : factor ((MUL | DIV) factor)*
         let mut node = self.factor();
 
-        while self.current_token == Some(Token::MUL) ||
-            self.current_token == Some(Token::DIV) {
+        while self.current_token == Token::MUL ||
+            self.current_token == Token::DIV {
 
             match self.current_token {
-                Some(Token::MUL) => {
+                Token::MUL => {
                     self.eat(Token::MUL);
                     let children: Vec<AST> = vec![node, self.factor()];
                     node = AST::new(Token::MUL, children);
                 },
-                Some(Token::DIV) => {
+                Token::DIV => {
                     self.eat(Token::DIV);
                     let children: Vec<AST> = vec![node, self.factor()];
                     node = AST::new(Token::DIV, children);
@@ -173,16 +173,16 @@ impl Parser {
 
         let mut node = self.term();
 
-        while self.current_token == Some(Token::PLUS) ||
-            self.current_token == Some(Token::MINUS) {
+        while self.current_token == Token::PLUS ||
+            self.current_token == Token::MINUS {
 
             match self.current_token {
-                Some(Token::PLUS) => {
+                Token::PLUS => {
                     self.eat(Token::PLUS);
                     let children: Vec<AST> = vec![node, self.term()];
                     node = AST::new(Token::PLUS, children);
                 },
-                Some(Token::MINUS) => {
+                Token::MINUS => {
                     self.eat(Token::MINUS);
                     let children: Vec<AST> = vec![node, self.term()];
                     node = AST::new(Token::MINUS, children);
