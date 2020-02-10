@@ -1,7 +1,7 @@
 use std::io;
 use std::io::Write;
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 enum Token {
     INTEGER(i32),
     PLUS,
@@ -118,7 +118,7 @@ impl Parser {
     }
 
     fn eat(&mut self, token: Token) {
-        if token == self.current_token.clone().unwrap() {
+        if token == self.current_token.unwrap() {
             self.current_token = Some(self.lexer.get_next_token());
         } else {
             panic!("Invalid syntax");
@@ -127,7 +127,7 @@ impl Parser {
 
     fn factor(&mut self) -> AST {
         // factor : INTEGER | LPAREN expr RPAREN
-        let token = self.current_token.clone().unwrap();
+        let token = self.current_token.unwrap();
         match token {
             Token::INTEGER(i) => {
                 self.eat(Token::INTEGER(i));
