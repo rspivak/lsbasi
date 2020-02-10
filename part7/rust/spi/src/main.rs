@@ -15,26 +15,26 @@ enum Token {
 
 
 pub struct Lexer {
-    chars: Vec<char>,
-    pos: usize,
+    chars: std::vec::IntoIter<char>,
     current_char: Option<char>,
 }
 
 impl Lexer {
     fn new(text: String) -> Lexer {
-        let chars=text.chars().collect::<Vec<char>>();
+        let mut chars=text
+            .chars()
+            .collect::<Vec<char>>()
+            .into_iter();
 
         Lexer {
             // Out of order to avoid "borrow of moved value" error
-            current_char: chars.first().copied(),
+            current_char: chars.next(),
             chars,
-            pos: 0,
         }
     }
 
     fn advance(&mut self) {
-        self.pos += 1;
-        self.current_char = self.chars.get(self.pos).copied();
+        self.current_char = self.chars.next();
     }
 
     fn skip_whitespace(&mut self) {
