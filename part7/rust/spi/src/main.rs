@@ -23,6 +23,7 @@ impl Lexer {
     fn new(text: String) -> Lexer {
         let mut chars=text
             .chars()
+            .filter(|c| !c.is_whitespace())
             .collect::<Vec<char>>()
             .into_iter();
 
@@ -35,16 +36,6 @@ impl Lexer {
 
     fn advance(&mut self) {
         self.current_char = self.chars.next();
-    }
-
-    fn skip_whitespace(&mut self) {
-        while let Some(ch) = self.current_char {
-            if ch.is_whitespace() {
-                self.advance();
-            } else {
-                break;
-            }
-        }
     }
 
     fn integer(&mut self) -> i32 {
@@ -62,7 +53,6 @@ impl Lexer {
     }
 
     fn get_next_token(&mut self) -> Token {
-        self.skip_whitespace();
         if let Some(ch) = self.current_char {
             if ch.is_digit(10) {
                 return Token::INTEGER(self.integer());
