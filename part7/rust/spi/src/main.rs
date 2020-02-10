@@ -219,18 +219,10 @@ impl Interpreter {
         let right_val = self.visit(&node.children[1]);
 
         match node.token {
-            Token::PLUS => {
-                left_val + right_val
-            },
-            Token::MINUS => {
-                left_val - right_val
-            },
-            Token::MUL => {
-                left_val * right_val
-            },
-            Token::DIV => {
-                left_val / right_val
-            },
+            Token::PLUS  => left_val + right_val,
+            Token::MINUS => left_val - right_val,
+            Token::MUL   => left_val * right_val,
+            Token::DIV   => left_val / right_val,
             _ => panic!("Error"),
         }
     }
