@@ -107,14 +107,12 @@ pub struct Parser {
 }
 
 impl Parser {
-    fn new(lexer: Lexer) -> Parser {
-        let mut parser = Parser {
+    fn new(mut lexer: Lexer) -> Parser {
+        Parser {
+            // Out of order to avoid "borrow of moved value" error
+            current_token: Some(lexer.get_next_token()),
             lexer,
-            current_token: None,
-        };
-        parser.current_token = Some(parser.lexer.get_next_token());
-
-        parser
+        }
     }
 
     fn eat(&mut self, token: Token) {
