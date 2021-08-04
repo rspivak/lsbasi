@@ -13,7 +13,7 @@ class Token:
     def __repr__(self):
         return self.__str__()
 
-RESERVED_KEYWORD = {
+RESERVED_KEYWORDS = {
     BEGIN: Token(BEGIN, BEGIN),
     END: Token(END, END)
 }
@@ -56,7 +56,7 @@ class Lexer:
             result += self.currentChar
             self.advance()
 
-        return RESERVED_KEYWORD.get(result, Token(ID, result))
+        return RESERVED_KEYWORDS.get(result, Token(ID, result))
 
     def peek(self):
         peekPos = self.pos + 1
@@ -150,7 +150,7 @@ class Num(AST):
 
 class Compound(AST):
     def __init__(self):
-        self.children = children
+        self.children = []
 
 class Asign(AST):
     def __init__(self, left, op, right):
@@ -165,3 +165,38 @@ class Var(AST):
 
 class NoOp(AST):
     pass
+
+class Parser:
+    def __init__(self, lexer):
+        self.lexer = lexer
+        self.currentToken = self.lexer.getNextToken()
+
+    def error(self, message='Invalid syntax'):
+        print(message)
+        sys.exit()
+
+    def eat(self, tokenType):
+        if self.currentToken.type == tokenType:
+            self.currentToken.type = self.lexer.getNextToken()
+        else:
+            self.error()
+
+    def program(self):
+        node = self.compoundStatement()
+        self.eat(DOT)
+
+        return node
+
+    def compoundStatement(self):
+        self.eat(BEGIN)
+        nodes = self.statementList()
+        self.eat(END)
+        root = Compound()
+
+        for node in nodes:
+            root.children.append(node)
+
+        return root
+
+    def statementList(self):
+        pass
