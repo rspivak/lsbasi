@@ -129,7 +129,7 @@ class Interpreter(object):
         if token.type == INTEGER:
             self.eat(INTEGER)
             return token.value
-        elif token.type == LPAREN:
+        else:
             self.eat(LPAREN)
             result = self.expr()
             self.eat(RPAREN)
