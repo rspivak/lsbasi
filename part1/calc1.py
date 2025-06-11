@@ -1,15 +1,16 @@
+import re
 # Token types
 #
 # EOF (end-of-file) token is used to indicate that
 # there is no more input left for lexical analysis
-INTEGER, PLUS, EOF = 'INTEGER', 'PLUS', 'EOF'
+INTEGER, PLUS, MINUS, EOF = 'INTEGER', 'PLUS', 'MINUS', 'EOF'
 
 
 class Token(object):
     def __init__(self, type, value):
         # token type: INTEGER, PLUS, or EOF
         self.type = type
-        # token value: 0, 1, 2. 3, 4, 5, 6, 7, 8, 9, '+', or None
+        # token value: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, '+', '-', or None
         self.value = value
 
     def __str__(self):
@@ -17,7 +18,7 @@ class Token(object):
 
         Examples:
             Token(INTEGER, 3)
-            Token(PLUS '+')
+            Token(PLUS, '+')
         """
         return 'Token({type}, {value})'.format(
             type=self.type,
@@ -58,17 +59,36 @@ class Interpreter(object):
         # what token to create based on the single character
         current_char = text[self.pos]
 
-        # if the character is a digit then convert it to
-        # integer, create an INTEGER token, increment self.pos
-        # index to point to the next character after the digit,
-        # and return the INTEGER token
+        # ignore whitspace
+        while re.fullmatch(r"\s", current_char):
+            if self.pos < len(text) - 1:
+                self.pos += 1
+                current_char = text[self.pos]
+            else:
+                return Token(EOF, None)
+
+        # if the character is a digit, check for
+        # a sequence of digits. Stop when a 
+        # non-digit is reached.
         if current_char.isdigit():
-            token = Token(INTEGER, int(current_char))
+            digits = ""
+            while self.pos <= len(text) - 1:
+                current_char = text[self.pos]
+                if current_char.isdigit():
+                    digits += current_char
+                else:
+                    break
+                self.pos += 1
+            token = Token(INTEGER, int(digits))
+            return token
+ 
+        if current_char == '+':
+            token = Token(PLUS, current_char)
             self.pos += 1
             return token
 
-        if current_char == '+':
-            token = Token(PLUS, current_char)
+        if current_char == '-':
+            token = Token(MINUS, current_char)
             self.pos += 1
             return token
 
@@ -93,9 +113,12 @@ class Interpreter(object):
         left = self.current_token
         self.eat(INTEGER)
 
-        # we expect the current token to be a '+' token
+        # we expect the current token to be a '+' or '-' token
         op = self.current_token
-        self.eat(PLUS)
+        if op.type == PLUS:
+            self.eat(PLUS)
+        elif op.type == MINUS:
+            self.eat(MINUS)
 
         # we expect the current token to be a single-digit integer
         right = self.current_token
@@ -105,10 +128,12 @@ class Interpreter(object):
 
         # at this point INTEGER PLUS INTEGER sequence of tokens
         # has been successfully found and the method can just
-        # return the result of adding two integers, thus
+        # return the result of adding or subtracting two integers, thus
         # effectively interpreting client input
-        result = left.value + right.value
-        return result
+        if op.type == PLUS:
+            return left.value + right.value 
+        elif op.type == MINUS:
+            return left.value - right.value
 
 
 def main():
