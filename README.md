@@ -1,4 +1,11 @@
-Source code for the series **Let's Build A Simple Interpreter** (Supports Python 3.7+ only)
+# Let's Build A Simple Interpreter
+
+This repository contains the source code and examples for the blog series *Let's Build A Simple Interpreter*.  
+The series takes you step by step through creating a basic interpreter in Python, introducing fundamental ideas behind interpreters such as lexing, parsing, abstract syntax trees, and evaluation.
+
+The goal is to make the concepts approachable and practical, so you can follow along with the blog posts, run the code yourself, and understand how interpreters work under the hood.  
+Each part builds on the previous one, gradually adding new language features and complexity.
+
 
 + [Let's Build A Simple Interpreter. Part 1.](https://ruslanspivak.com/lsbasi-part1/)
 + [Let's Build A Simple Interpreter. Part 2.](https://ruslanspivak.com/lsbasi-part2/)
